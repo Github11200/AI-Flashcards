@@ -22,25 +22,35 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>
-        <div
-          className={cn(
-            "min-h-screen bg-background font-sans antialiased p-5",
-            fontSans.variable
-          )}
-        >
-          <Analytics />
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
+    <ClerkProvider
+      signInForceRedirectUrl={"/checkAccount"}
+      signUpForceRedirectUrl={"/checkAccount"}
+      appearance={{
+        elements: {
+          footer: "hidden",
+        },
+      }}
+    >
+      <html lang="en">
+        <body>
+          <div
+            className={cn(
+              "min-h-screen bg-background font-sans antialiased p-5",
+              fontSans.variable
+            )}
           >
-            {children}
-          </ThemeProvider>
-        </div>
-      </body>
-    </html>
+            <Analytics />
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
+          </div>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

@@ -4,7 +4,7 @@ import { Deck } from "@/lib/interfaces/interfaces";
 
 export async function POST(request: Request) {
   const params = await request.json();
-  const userId = "user_2kclYQ1Cu80UtPyVqfbAsbkkXDa";
+  const userId = params.userId as string;
   const deckName = params.deckName as string;
 
   const usersCollection = query(collection(db, "users"));

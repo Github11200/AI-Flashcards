@@ -4,6 +4,8 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
+import { UserButton } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import { Deck } from "@/lib/interfaces/interfaces";
 import { useEffect, useState } from "react";
 import { getDeck } from "@/lib/firebase/crud";
@@ -19,10 +21,18 @@ import { Progress } from "@/components/ui/progress";
 
 export default function Page() {
   const deckName = (useParams().deck as string).replaceAll("-", " ");
+  const { user } = useUser();
+  const userId = user?.id as string;
 
   const [deck, setDeck] = useState<Deck>();
   const [isFlipped, setIsFlipped] = useState(false);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
+
+  useEffect(() => {
+    if (userId) {
+      getDeck(userId, deckName, setDeck);
+    }
+  }, [userId, deckName]);
 
   const handleFlip = () => {
     setIsFlipped(!isFlipped);
@@ -49,8 +59,10 @@ export default function Page() {
   };
 
   useEffect(() => {
-    getDeck("", deckName, setDeck);
-  });
+    if (userId) {
+      getDeck(userId, deckName, setDeck);
+    }
+  }, [userId, deckName]);
 
   return (
     <div className="flex flex-col items-center h-screen">
@@ -65,6 +77,7 @@ export default function Page() {
         </h1>
         <div className="flex items-center space-x-4">
           <ModeToggle />
+          <UserButton />
         </div>
       </div>
 
