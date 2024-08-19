@@ -9,7 +9,7 @@ import {
 } from "firebase/firestore";
 
 export async function POST(request: Request) {
-  const userId = (await request.json()).userId;
+  const userId = "user_2kclYQ1Cu80UtPyVqfbAsbkkXDa";
 
   const usersQuery = query(collection(db, "users"));
   let querySnapshot = (await getDocs(usersQuery)).docs.filter(

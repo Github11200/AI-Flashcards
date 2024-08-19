@@ -16,7 +16,7 @@ export interface CreateDeckRequestParams {
 
 export async function POST(request: Request) {
   const params: CreateDeckRequestParams = await request.json();
-  const userId = params.userId;
+  const userId = "user_2kclYQ1Cu80UtPyVqfbAsbkkXDa";
   const newDeck = params.newDeck;
 
   const userDocRef = doc(collection(db, "users"), userId);

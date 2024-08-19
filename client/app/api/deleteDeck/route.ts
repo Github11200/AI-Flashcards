@@ -11,7 +11,7 @@ import {
 
 export async function POST(request: Request) {
   const params = await request.json();
-  const userId = params.userId;
+  const userId = "user_2kclYQ1Cu80UtPyVqfbAsbkkXDa";
   const deckToDeleteName = params.deckName;
 
   const userDocRef = doc(collection(db, "users"), userId);

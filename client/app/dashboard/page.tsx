@@ -2,9 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { createDeck, deleteDeck, getDecks } from "@/lib/firebase/crud";
-import { UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { Deck } from "@/lib/interfaces/interfaces";
 import {
   Card,
@@ -25,18 +23,14 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { useState, useEffect } from "react";
 
 export default function Page() {
   const [decks, setDecks] = useState<Deck[]>();
 
-  const { user } = useUser();
-  const userId = user?.id as string;
-
   useEffect(() => {
-    if (userId) {
-      getDecks(userId, setDecks);
-    }
-  }, [userId]);
+    getDecks("", setDecks);
+  });
 
   return (
     <div className="relative min-h-screen p-4">
@@ -97,7 +91,6 @@ export default function Page() {
           </DialogContent>
         </Dialog>
         <ModeToggle />
-        <UserButton />
       </div>
 
       <div className="flex flex-col items-center justify-center h-full pt-12">
@@ -132,8 +125,8 @@ export default function Page() {
                   <Button
                     className="w-full mt-2"
                     onClick={() =>
-                      deleteDeck(userId, deck.name).then(() =>
-                        getDecks(userId, setDecks)
+                      deleteDeck("", deck.name).then(() =>
+                        getDecks("", setDecks)
                       )
                     }
                     variant={"destructive"}

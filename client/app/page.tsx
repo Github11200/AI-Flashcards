@@ -1,14 +1,6 @@
 "use client";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
-import {
-  SignIn,
-  SignedIn,
-  SignedOut,
-  SignOutButton,
-  UserButton,
-  useUser,
-} from "@clerk/nextjs";
 import Link from "next/link";
 import ParticlesBackground from "@/components/ParticlesBackground";
 import { useState, useEffect } from "react";
@@ -22,34 +14,6 @@ import Image from "next/image";
 //--------------------------
 
 export default function Home() {
-  const { user } = useUser();
-  if (user) {
-    // redirect("/checkAccount");
-  }
-
-  //-----------------stripe function----------------
-  const handleSubmit = async () => {
-    const checkoutSession = await fetch("/api/checkout_session", {
-      method: "POST",
-    });
-
-    const checkoutSessionJson = await checkoutSession.json();
-
-    if (checkoutSession.status === 500) {
-      console.error(checkoutSessionJson.message);
-      return;
-    }
-    const stripe = await getStripe();
-    const { error } = await stripe.redirectToCheckout({
-      sessionId: checkoutSessionJson.id,
-    });
-
-    if (error) {
-      console.error(error.message);
-    }
-  };
-  //------------------------------------
-
   return (
     <div className="relative min-h-screen">
       {/* Navigation */}
@@ -82,17 +46,9 @@ export default function Home() {
         {/* Top-right controls */}
         <div className="absolute top-4 right-4 flex items-center space-x-4">
           <ModeToggle />
-          <SignedIn>
-            <UserButton />
-            <SignOutButton />
-          </SignedIn>
-          <SignedOut>
-            <div className="flex space-x-4">
-              <Link href="/sign-in">
-                <Button>Login</Button>
-              </Link>
-            </div>
-          </SignedOut>
+          <Link href="/dashboard">
+            <Button>Go to dashboard</Button>
+          </Link>
         </div>
       </nav>
 
@@ -112,11 +68,6 @@ export default function Home() {
             Create flashcards using text and images, organize them into decks,
             and study them with ease.
           </p>
-          <SignedIn>
-            <Link href="/dashboard">
-              <Button className="mb-4">View My Decks</Button>
-            </Link>
-          </SignedIn>
         </div>
         <video
           className="xl:w-3/6 w-5/6 rounded-2xl mt-10 border-2 p-3"
@@ -239,36 +190,6 @@ export default function Home() {
             <p className="text-gray-600 dark:text-gray-300">
               Use an image of your notes to create flashcards.
             </p>
-          </Card>
-        </div>
-      </div>
-
-      {/* Pricing section */}
-      <div id="pricing" className="flex flex-col items-center min-h-screen p-4">
-        <h2 className="text-3xl font-bold mb-8 text-center">Pricing</h2>
-        <p className="text-lg mb-16 max-w-lg">
-          One simple plan. No hidden fees. Cancel anytime.
-        </p>
-
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-8">
-          <Card className="flex-1 max-w-md flex flex-col items-center gap-8 shadow-md rounded-lg p-8 w-[350px] hover:shadow-lg transition-shadow duration-300">
-            <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">
-              Basic Version
-            </h3>
-            <p className="text-gray-600 dark:text-gray-300 text-2xl">
-              $5/month
-            </p>
-            <ul className="text-gray-600 dark:text-gray-300 list-disc">
-              <li>Generate cards from text</li>
-              <li>Generate cards from images</li>
-              <li>Manage and study decks</li>
-            </ul>
-            <Button
-              className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded"
-              onClick={handleSubmit}
-            >
-              Get Started
-            </Button>
           </Card>
         </div>
       </div>
