@@ -2,8 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useClerk, useUser } from "@clerk/nextjs";
-import { clerkClient } from "@clerk/nextjs/server";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -11,7 +10,7 @@ import { useEffect, useState } from "react";
 export default function CheckAccountPage() {
   const [exists, setExists] = useState(false);
   const [loading, setLoading] = useState(true);
-  const { user } = useUser();
+  const { user } = useKindeBrowserClient();
 
   useEffect(() => {
     if (user) {
@@ -29,7 +28,7 @@ export default function CheckAccountPage() {
           setExists(data.exists);
 
           if (!data.exists) {
-            await fetch("/api/deleteUserFromClerk", {
+            await fetch("/api/deleteUserFromKinde", {
               method: "POST",
               body: JSON.stringify({ userId: user.id }),
             });

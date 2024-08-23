@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -21,7 +20,6 @@ export default function Page() {
   const [notificationVisible, setNotificationVisible] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const { user } = useUser();
 
   const generateDeckFromText = (userDescription: string) => {
     fetch("/api/generateDeckFromText", {
@@ -73,7 +71,7 @@ export default function Page() {
 
   const handleNewDeckCreation = async () => {
     try {
-      await createDeck({ userId: user?.id as string, newDeck: deck as Deck });
+      // await createDeck({ userId: user?.id as string, newDeck: deck as Deck });
       setNotificationMessage("Deck saved successfully!");
       setNotificationVisible(true);
       setTimeout(() => {
@@ -101,7 +99,6 @@ export default function Page() {
         </h1>
         <div className="flex space-x-4">
           <ModeToggle />
-          <UserButton />
         </div>
       </div>
       <div>
@@ -178,11 +175,6 @@ export default function Page() {
       {/* Notification */}
       {notificationVisible && (
         <div className="fixed bottom-5 right-5 bg-green-500 text-white p-4 rounded-lg shadow-lg flex items-center space-x-3">
-          <Image
-            src="/checkmark.svg"
-            alt="Checkmark icon"
-            className="w-6 h-6"
-          />
           <span>{notificationMessage}</span>
         </div>
       )}

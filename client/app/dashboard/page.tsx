@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { createDeck, deleteDeck, getDecks } from "@/lib/firebase/crud";
-import { UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Deck } from "@/lib/interfaces/interfaces";
@@ -29,14 +28,14 @@ import {
 export default function Page() {
   const [decks, setDecks] = useState<Deck[]>();
 
-  const { user } = useUser();
-  const userId = user?.id as string;
+  // const { user } = useUser();
+  // const userId = user?.id as string;
 
-  useEffect(() => {
-    if (userId) {
-      getDecks(userId, setDecks);
-    }
-  }, [userId]);
+  // useEffect(() => {
+  //   if (userId) {
+  //     getDecks(userId, setDecks);
+  //   }
+  // }, [userId]);
 
   return (
     <div className="relative min-h-screen p-4">
@@ -97,7 +96,6 @@ export default function Page() {
           </DialogContent>
         </Dialog>
         <ModeToggle />
-        <UserButton />
       </div>
 
       <div className="flex flex-col items-center justify-center h-full pt-12">
@@ -131,11 +129,11 @@ export default function Page() {
                   </Link>
                   <Button
                     className="w-full mt-2"
-                    onClick={() =>
-                      deleteDeck(userId, deck.name).then(() =>
-                        getDecks(userId, setDecks)
-                      )
-                    }
+                    // onClick={() =>
+                    //   deleteDeck(userId, deck.name).then(() =>
+                    //     getDecks(userId, setDecks)
+                    //   )
+                    // }
                     variant={"destructive"}
                   >
                     Delete

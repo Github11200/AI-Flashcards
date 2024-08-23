@@ -1,17 +1,13 @@
 "use client";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
-import {
-  SignIn,
-  SignedIn,
-  SignedOut,
-  SignOutButton,
-  UserButton,
-  useUser,
-} from "@clerk/nextjs";
 import Link from "next/link";
 import ParticlesBackground from "@/components/ParticlesBackground";
-import { useState, useEffect } from "react";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import {
+  RegisterLink,
+  LoginLink,
+} from "@kinde-oss/kinde-auth-nextjs/components";
 
 //----------stripe import----
 import getStripe from "@/lib/stripe/get-stripe";
@@ -22,10 +18,7 @@ import Image from "next/image";
 //--------------------------
 
 export default function Home() {
-  const { user } = useUser();
-  if (user) {
-    // redirect("/checkAccount");
-  }
+  const { isAuthenticated } = useKindeBrowserClient();
 
   //-----------------stripe function----------------
   const handleSubmit = async () => {
@@ -82,17 +75,15 @@ export default function Home() {
         {/* Top-right controls */}
         <div className="absolute top-4 right-4 flex items-center space-x-4">
           <ModeToggle />
-          <SignedIn>
-            <UserButton />
-            <SignOutButton />
-          </SignedIn>
-          <SignedOut>
+          {isAuthenticated ? (
+            <div></div>
+          ) : (
             <div className="flex space-x-4">
-              <Link href="/sign-in">
+              <LoginLink postLoginRedirectURL="/checkAccount">
                 <Button>Login</Button>
-              </Link>
+              </LoginLink>
             </div>
-          </SignedOut>
+          )}
         </div>
       </nav>
 
@@ -112,11 +103,11 @@ export default function Home() {
             Create flashcards using text and images, organize them into decks,
             and study them with ease.
           </p>
-          <SignedIn>
+          {isAuthenticated && (
             <Link href="/dashboard">
               <Button className="mb-4">View My Decks</Button>
             </Link>
-          </SignedIn>
+          )}
         </div>
         <video
           className="xl:w-3/6 w-5/6 rounded-2xl mt-10 border-2 p-3"
